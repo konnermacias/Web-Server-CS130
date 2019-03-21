@@ -1,0 +1,301 @@
+*******************************************************************************
+***********    Welcome to git-r-done's Web Server API    **********************
+*******************************************************************************
+
+-----------------
+Original Authors: Konner Macias, Victor Fu, Will Htun, Jason Wittmuss
+-----------------
+
+---------------
+Important Files
+--------------
+- server_main.cc : Takes in config file, calls config parser, and starts server
+- config_parser.cc : Parses config file and assigns data members
+- server.cc : Listens for new connections
+- session.cc : receives a request and builds an appropriate request handler to 
+                send back a response
+- request.cc : class for a standard HTTP request
+- response.cc : class for a standard HTTP response
+- request_handler.h : simple interface for all specific request handlers to hit
+- dispatcher.cc : takes in request and creates a handler manager object
+- handler_manager.cc : returns an appropriate request handler for a given
+                        request
+- echo_handler.cc : * echos request back as response
+- static_handler.cc : * serves a static file from a directory on server
+- error_handler.cc : * reurns a 404 response
+- meme_handler.cc : * serves meme web app
+- health_handler.cc : * serves status of working server
+- bad_handler.cc : * serves any request that cannot be parsed
+- proxy_handler.cc : * serves content of another server via itself
+- status_handler.cc : * displays info on status of the web server
+- status_obj.cc : class to work with status entry database
+- url_parser.cc : class dedicated to encoding/decoding text
+
+* : inherits from request_handler
+
+
+------------------------------------
+How to build, test, and run the code
+------------------------------------
+Here we assume you are in git-r-done/
+
+Build
+-----------
+$ cd build
+$ cmake ..
+$ make
+
+Test
+----------
+$ cd build
+$ cmake ..
+$ make
+$ make test
+
+For further info on tests:
+$ tests/
+
+Run the code
+------------
+** Build and test code first!
+
+$ cd build
+$ bin/server_main ../tests/configs/echo_server_config
+
+Use your browser to view the page: http://localhost:8080/
+
+------------------------------
+ How to add a request handler 
+------------------------------
+
+To make it easier to know how to contribute, we think showing by example is 
+fitting here.
+
+E.g: Let's examine our Static Handler.
+--------------------------------------
+Inherits from: RequestHandler
+
+Public:
+
+    static RequestHandler* create(const NginxConfig& config,
+                                    const std::string& path);
+    
+        All handlers must have a static create function! This returns an 
+        instance of a RequestHandler object capable of handling a request.
+
+    std::unique_ptr<Response> HandleRequest(const Request& request);
+
+        RequestHandler has a virtual method called HandleRequest, this must be 
+        implemented by your new handler.
+
+        For StaticHandler, this reads in a file stream of data and builds an 
+        appropriate response object to send back.
+
+Private:
+    std::string root_;
+
+        Variable holds root path for server.
+
+    std::string filedir_;
+    
+        Variable holds which directory we are in. (e.g: static_files1/)
+
+
+
+By this point, we know what StaticHandler does at a high level, but next comes
+learning what's involved with a standard Request and Response object.
+
+Request
+--------------------------
+Public:
+    Request(std::string req);
+
+        This creates a Request object and assigns the private req_ to req.
+
+    static std::unique_ptr<Request> request_handler(std::string raw_req); 
+
+        ## CHANGE NAME OF THIS FUNCTION TO build_request
+        Give this function a string of a request (ex: "GET / HTTP/1.1\r\n\r\n")
+        and it will parse the incoming request. It sets all of its core
+        member variables in the process. Returns a freshly created Request obj.
+
+        This is the commonly used constructor for a request object.
+    
+    Getters:
+        std::string getReqRaw() const;
+
+            Returns original request string.
+
+        std::string method() const;
+        
+            Returns method type of request (ex: GET)
+        
+        std::string uri_path() const;
+
+            Returns uri path of request (ex: / )
+
+        std::string http_version() const;
+
+            Returns the http version of the request (ex: HTTP/1.1)
+
+Private:
+    bool parse_request();
+    
+        This function parses a request and assigns data members. Returns a
+        bool depending on whether or not the parsing was successful.
+
+    bool check_first_request_line(std::string req_line);
+
+        Reads header line of request (ex: "GET / HTTP/1.1") and sets variables
+    
+
+    Variables:
+        std::string req_;
+        std::string method_;
+        std::string uri_path_;
+        std::string http_version_;
+        Header_Fields header_fields_;
+
+        This last object, header_fields_, has the following type:
+            std::vector<std::pair<std::string,std::string>>
+        
+        It holds a data pair from a request. (ex: <"Host","35.185.231.37">)
+
+Great! Now we understand the structure of a request object and what it is 
+capable of.
+
+Response
+----------------------
+Public:
+    Response();
+
+        Constructor, creates fresh response instance.
+
+    enum statuscode { OK = 200, CREATED = 201, ... };
+
+        Defines all possible standard HTTP response codes.
+    
+    Setters:
+
+        void SetStatus(const statuscode status_code);
+
+        void SetHeader(const std::string& header_name, 
+                        const std::string& header_value);
+
+        void ReSetHeader(const std::string& header_name, 
+                          const std::string& header_value);
+
+        void SetBody(std::string body_value);    
+
+    std::string Output();
+
+        Builds your response message from all this pieces.
+
+Private:
+    Variables:
+        statuscode status_code_;
+        std::string header_;
+        std::string body_;
+        int statuslinesize_;
+        int headersize_;
+        int bodysize_;
+
+Awesome! Let's look an example at how this would be used in a .cc:
+--
+    std::unique_ptr<Response> response(new Response());
+    response->SetStatus(Response::OK);
+    response->SetHeader("Content-Type", contenttype);
+    response->SetHeader("Content-Length", std::to_string(image.length()));
+    response->SetBody(image);
+--
+
+By this point, you should have been able to implement a new handler. 
+Now we must integrate it into rest of the code base. 
+
+handler_manager.cc
+--------------------------
+handler_manger is the responsible for the creation of instances of handlers.
+
+Inside handler_manager you will notice blocks of if statements that allow the 
+create of several handler types.
+
+To add yours, simply create an if block and add to the file. e.i.: 
+
+if (name =="NEWHANDLER")
+{
+    return std::unique_ptr<RequestHandler>(NEWHANDLER::create(config,path));
+}
+
+dispatcher.cc
+--------------------------
+Dispacher is responsible for controling incoming requests and dispatching 
+the correct handlers.
+
+Simply add a include block at the top so that it can recognize your handler. 
+
+#include "NEWHANDLER_handler.h"
+
+Adding src to CMakeLists.txt
+----------------------------
+Next to all the add_library(X src/X.cc) in CMakeLists.txt, add your handler
+source code.
+
+add_library(your_handler src/your_handler.cc)
+
+Next, append your_handler inside of:
+
+target_link_libraries(server_main ..libs..
+
+Adding tests to CMakeLists.txt
+------------------------------
+Add the following:
+
+add_executable(your_handler_test tests/your_handler_test.cc)
+target_link_libraries(your_handler_test [lib files your test file depends on])
+
+
+How to add a handler summarized
+-------------------------------
+
+- Your handler must have the methods create, and HandleRequest.
+
+- Your create method should be simple should use the same format as the 
+    exisiting handlers. See them for reference. 
+
+- For HandleRequest, here is where you use request information to build an
+    appropriate response object.
+
+- Add an if block to the handle_manger.cc with your new handler. 
+
+- #include your new handler in dispatcher.cc
+
+- Update CMakeLists.txt to include new lib.
+
+- Add your units tests inside /tests folder
+
+- Update CMakeLists.txt to include tests as well
+
+
+Notes
+-------------------------------
+We currently have the following handlers:
+    - EchoHandler
+    - StaticHandler
+    - StatusHandler
+    - ErrorHandler
+    - HealthHandler
+    - ProxyHandler
+    - MemeHandler
+
+We currently have the following paths configured:
+    - /echo : our echo server which spits back the request
+    - /static1/ : one directory path for static handler
+    - /static2/ : another directory path for serving static files
+    - /status : status page for displaying server info
+    - /meme/create : create page of meme handler
+    - /meme/list : list page of meme handler
+    - /meme/view?id= : view a meme corresponding to id
+
+    Check these out if you need more implementation assistance.
+    Feel free to expand upon these by adding in new handlers!
+

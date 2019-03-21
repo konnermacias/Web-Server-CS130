@@ -1,0 +1,5 @@
+HTTP/1.1 404
+Content-Type: text/plain
+Content-Length: 57
+
+404: File not found on path. Please provide correct path.

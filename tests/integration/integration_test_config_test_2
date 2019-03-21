@@ -1,0 +1,9 @@
+http {
+  server {
+    listen 2000;
+    handler static {
+      location /static_files1;
+      url /static1;
+    }
+  }
+}

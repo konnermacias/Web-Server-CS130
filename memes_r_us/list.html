@@ -1,0 +1,144 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <!-- css -->
+    <!-- bulma -->
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bulma/0.7.4/css/bulma.min.css">
+    <script defer src="https://use.fontawesome.com/releases/v5.3.1/js/all.js"></script>
+
+    <script src="https://code.jquery.com/jquery-2.1.4.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/materialize/0.100.2/js/materialize.min.js"></script>
+
+    <script>
+           window.onload = function() {
+            var full_name = "sortterm_replacethis";
+            document.getElementById(full_name).setAttribute("selected", "selected");
+        }
+    </script>
+
+</head>
+
+<style>
+    #name {
+        margin: 25px 0;
+        font-size: 30px;
+        width: 100%;
+        text-align: center;
+    }
+
+    #meme-wrapper {
+        display: flex;
+        justify-content: center;
+    }
+
+    #meme {
+        display: inline-block;
+        position: relative;
+        margin-left: auto;
+        margin-right: auto;
+    }
+
+    span {
+        color: white;
+        font: 2em bold Impact, sans-serif;
+        position: absolute;
+        text-align: center;
+        width: 100%;
+    }
+
+    #top {
+        top: 0;
+        left: 0;
+
+        font-family: "Impact", Charcoal, sans-serif;
+    }
+
+    #bottom {
+        bottom: 0;
+        left: 0;
+
+        font-family: "Impact", Charcoal, sans-serif;
+    }
+
+    #entry {
+        margin-left: 200px;
+    }
+
+    #level {
+        margin-top: 30px;
+        margin-bottom: 30px;
+    }
+    .search-box {
+        float: left;
+    }
+    .description {
+        margin-bottom: 25px;
+        text-align: center;
+    }
+    .sort {
+        margin-bottom: 25px;
+        text-align: center;
+        float: left;
+    }
+
+</style>
+
+<nav class="navbar is-transparent">
+    <div class="navbar-brand">
+        <a class="navbar-item" href="/meme/create">
+            <b>Make-a-Meme</b>
+        </a>
+        <div class="navbar-burger burger" data-target="navbarExampleTransparentExample">
+            <span></span>
+            <span></span>
+            <span></span>
+        </div>
+    </div>
+
+    <div id="navbar-konner" class="navbar-menu">
+        <div class="navbar-start">
+            <a class="navbar-item" href="/meme/create">
+                Create
+            </a>
+            <a class="navbar-item" href="/meme/list">
+                Browse
+            </a>
+        </div>
+    </div>
+    </div>
+</nav>
+
+<!-- Header-->
+<nav class="level" id="level">
+    <div class="level-item has-text-centered">
+        <div>
+            <p class="title" style="color: #ffab40;">Browse All Memes</p>
+            <br>
+            <p class="description"> Dank history </p>
+            <form method="get">
+                <div class="search-box"> 
+                    <input class="input search-box" type="text" name="q" value="searchterm_replacethis" placeholder="Enter phrase">
+                </div>
+                <div class="search-box"> 
+                    <input class="button is-link" type="submit" value="Search">
+                </div>
+                <br> <br>
+                <p class="sort"> Sort By: </p>
+                <select required name="sort" id="search_filter">
+                    <option id="newest" value="newest"> Newest </option>
+                    <option id="oldest" value="oldest"> Oldest </option>
+                    <option id="a-z" value="a-z"> A-Z </option>
+                    <option id="z-a" value="z-a"> Z-A </option>
+                    <option id="id" value="id"> ID </option>
+                </select><br>
+            </form>
+        </div>
+    </div>
+</nav>
+
+<body>
+    <div class="columns is-centered">
+        <div class="column is-8">

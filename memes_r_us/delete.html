@@ -1,0 +1,117 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <!-- css -->
+    <!-- bulma -->
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bulma/0.7.4/css/bulma.min.css">
+    <script defer src="https://use.fontawesome.com/releases/v5.3.1/js/all.js"></script>
+
+    <script src="https://code.jquery.com/jquery-2.1.4.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/materialize/0.100.2/js/materialize.min.js"></script>
+
+</head>
+
+<style>
+    #name {
+        margin: 25px 0;
+        font-size: 30px;
+        width: 100%;
+        text-align: center;
+    }
+
+    #meme-wrapper {
+        display: flex;
+        justify-content: center;
+    }
+
+    #meme {
+        display: inline-block;
+        position: relative;
+        margin-left: auto;
+        margin-right: auto;
+    }
+
+    span {
+        color: white;
+        font: 2em bold Impact, sans-serif;
+        position: absolute;
+        text-align: center;
+        width: 100%;
+    }
+
+    #top {
+        top: 0;
+        left: 0;
+
+        font-family: "Impact", Charcoal, sans-serif;
+    }
+
+    #bottom {
+        bottom: 0;
+        left: 0;
+
+        font-family: "Impact", Charcoal, sans-serif;
+    }
+
+    #entry {
+        margin-left: 200px;
+    }
+
+    #level {
+        margin-top: 30px;
+        margin-bottom: 30px;
+    }
+    .search-box {
+        float: left;
+    }
+    .description {
+        margin-bottom: 25px;
+        text-align: center;
+    }
+    .sort {
+        margin-bottom: 25px;
+        text-align: center;
+        float: left;
+    }
+
+</style>
+
+<nav class="navbar is-transparent">
+    <div class="navbar-brand">
+        <a class="navbar-item" href="/meme/create">
+            <b>Make-a-Meme</b>
+        </a>
+        <div class="navbar-burger burger" data-target="navbarExampleTransparentExample">
+            <span></span>
+            <span></span>
+            <span></span>
+        </div>
+    </div>
+
+    <div id="navbar-konner" class="navbar-menu">
+        <div class="navbar-start">
+            <a class="navbar-item" href="/meme/create">
+                Create
+            </a>
+            <a class="navbar-item" href="/meme/list">
+                Browse
+            </a>
+        </div>
+    </div>
+</nav>
+
+<!-- Header-->
+<nav class="level" id="level">
+    <div class="level-item has-text-centered">
+        <div>
+            <p class="title" style="color: #ffab40;">Meme Deleted</p>
+            <br>
+            <a href="/meme/list" class="button is-link"> Return to list </a>
+        </div>
+    </div>
+</nav>
+
+</html>

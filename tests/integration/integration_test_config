@@ -1,0 +1,15 @@
+http {
+  server {
+    listen 8080;
+    handler echo {
+      url /echo;
+    }
+    handler proxy {
+      url /proxy1;
+      host www3.coolcoders.cs130.org;
+      path /static_1/a.txt;
+      port 80;
+    }
+    server_name 127.0.0.1;
+  }
+}

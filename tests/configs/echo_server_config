@@ -1,0 +1,54 @@
+#port 7100 is exposed by docker
+http {
+  server {
+    listen 80;
+    root /usr/src/project;
+    handler echo {
+      url /echo;
+    }
+    handler static {
+      location /static_files1;
+      url /static1;
+    }
+    handler static {
+      location /static_files2;
+      url /static2;
+    }
+    handler static {
+      location /static_meme_templates;
+      url /meme_templates;
+    }
+    handler status {
+      url /status;
+    }
+    handler proxy {
+      url /proxy1;
+      host www3.coolcoders.cs130.org;
+      path /static_1/a.txt;
+      port 80;
+    }
+    handler proxy {
+      url /proxy2;
+      host www.ucla.edu;
+      path /;
+      port 80;
+    }
+    handler proxy {
+      url /proxy3;
+      host www.cs.pomona.edu;
+      path /~kim/why.pdf;
+      port 80;
+    }
+    handler meme {
+      location /memes_r_us;
+      url /meme;
+      save /memes_r_us;
+    }
+    handler health {
+      url /health;
+    }
+    handler bad {
+      url /bad;
+    }
+  }
+}

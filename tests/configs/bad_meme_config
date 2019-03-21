@@ -1,0 +1,12 @@
+#port 7100 is exposed by docker
+http {
+  server {
+    listen 80;
+    root /usr/src/project;
+    handler meme {
+      location /memes_r_us;
+      url /meme;
+      save /rubbish;
+    }
+  }
+}

@@ -1,0 +1,156 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <!-- css -->
+    <!-- bulma -->
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bulma/0.7.4/css/bulma.min.css">
+    <script defer src="https://use.fontawesome.com/releases/v5.3.1/js/all.js"></script>
+
+    <script src="https://code.jquery.com/jquery-2.1.4.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/materialize/0.100.2/js/materialize.min.js"></script>
+
+    <script>
+        function checkform(form) {
+            var inputs = form.getElementsByTagName('input');
+            for (var i = 0; i < inputs.length; i++) {
+                if (inputs[i].hasAttribute("required")) {
+                    if (inputs[i].value == "") {
+                        alert("Please fill all required fields to become a true meme master");
+                        return false;
+                    }
+                }
+            }
+
+            var meme_select = form.elements;
+            if (meme_select[1].value == "Select a template...") {
+                alert("Please select a meme template");
+                return false;
+            }
+            return true;
+        }
+
+        window.onload = function() {
+            var full_name = "meme_object_img";
+            var index = full_name.indexOf("/");
+            var img_name = full_name.substr(index+1, full_name.length);
+            if (img_name.substr(0,3) == 'df-') {
+                document.getElementById(img_name)
+                img_name = img_name.substr(3, img_name.length);
+                document.getElementById('deepfry-checkbox').setAttribute("checked", "checked");
+            }
+            console.log(img_name);
+            document.getElementById(img_name).setAttribute("selected", "selected");
+        }
+    </script>
+
+</head>
+
+<nav class="navbar is-transparent">
+    <div class="navbar-brand">
+        <a class="navbar-item" href="/meme/create">
+            <b>Make-a-Meme</b>
+        </a>
+        <div class="navbar-burger burger" data-target="navbarExampleTransparentExample">
+            <span></span>
+            <span></span>
+            <span></span>
+        </div>
+    </div>
+
+    <div id="navbar-konner" class="navbar-menu">
+        <div class="navbar-start">
+            <a class="navbar-item" href="/meme/create">
+                Create
+            </a>
+            <a class="navbar-item" href="/meme/list">
+                Browse
+            </a>
+        </div>
+    </div>
+    </div>
+</nav>
+
+<!-- Header-->
+<nav class="level">
+    <div class="level-item has-text-centered">
+        <div>
+            <p class="title" style="color: #ffab40;">Edit</p>
+            <br>
+        </div>
+    </div>
+</nav>
+
+
+<body>
+    <br>
+    <center>
+        <p class="title is-5">Add more sauce to an existing meme</p>
+    </center>
+    <!-- bulma -->
+    <section class="section">
+        <div class="container is-1-fluid">
+            <div class="columns is-centered">
+                <div class="column is-half">
+                    <form action="/meme/result.html" onsubmit="return checkform(this)" method=post>
+                        <div class="field">
+                            <label class="label">Name</label>
+                            <div class="control radius-5">
+                                <input name="name" class="input" type="text" placeholder="Text input" value="meme_object_name" maxlength="50" required>
+                            </div>
+                        </div>
+
+                        <div class="field">
+                            <label class="label">Meme Format</label>
+                            <div class="control radius-5">
+                                <div class="select">
+                                    <select required name="image" id="meme_template">
+                                        <option>Select a template...</option>
+                                        <option id="Evil-Kermit.jpg" value="Evil-Kermit.jpg" >Evil-Kermit</option>
+                                        <option id="pikachu-face.png" value="pikachu-face.png">Pikachu Face</option>
+                                        <option id="Most-Interesting-Man.png" value="Most-Interesting-Man.png">Most Interesting Man</option>
+                                        <option id="BLB.png" value="BLB.png">Bad Luck Brian</option>
+                                    </select><br>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="field">
+                            <div class="control radius-5">
+                                <label class="checkbox">
+                                    <input id="deepfry-checkbox" name="deepfry" type="checkbox" value="True"> Deepfry <br>
+                                </label>
+                            </div>
+                        </div>
+
+                        <div class="field">
+                            <label class="label">Top-Text</label>
+                            <div class="control radius-5">
+                                <input name="top" class="input" type="text" placeholder="Text input" value="meme_object_top" maxlength="50" required>
+                            </div>
+                        </div>
+
+                        <div class="field">
+                            <label class="label">Bottom-Text</label>
+                            <div class="control radius-5">
+                                <input name="bottom" class="input" type="text" placeholder="Text input" value="meme_object_bot" maxlength="50" required>
+                            </div>
+                        </div>
+
+                        <div class="field is-grouped">
+                            <div class="control">
+                                <input type="hidden" name="posttype" value="edit">
+                                <input type="hidden" name="meme_id" value="meme_object_id">
+                                <input type="submit" value="Update" class="button is-link">
+                            </div>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </section>
+</body>
+
+</html>

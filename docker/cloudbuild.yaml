@@ -1,0 +1,35 @@
+steps:
+- name: 'gcr.io/cloud-builders/docker'
+  entrypoint: 'bash'
+  args:
+  - '-c'
+  - |
+    docker pull gcr.io/$PROJECT_ID/server_gitrdone:base || exit 0
+- name: 'gcr.io/cloud-builders/docker'
+  args: [
+    'build',
+    '-f', 'docker/base.Dockerfile',
+    '-t', 'server_gitrdone:base',
+    '-t', 'gcr.io/$PROJECT_ID/server_gitrdone:base',
+    '--cache-from', 'gcr.io/$PROJECT_ID/server_gitrdone:base',
+    '.'
+  ]
+- name: 'gcr.io/cloud-builders/docker'
+  args: ['push', 'gcr.io/$PROJECT_ID/server_gitrdone:base']
+- name: 'gcr.io/cloud-builders/docker'
+  args: [
+    'build',
+    '-f', 'docker/Dockerfile',
+    '-t', 'gcr.io/$PROJECT_ID/server_gitrdone:latest',
+    '.'
+  ]
+- name: 'gcr.io/cloud-builders/docker'
+  args: [
+    'build',
+    '-f', 'docker/coverage.Dockerfile',
+    '-t', 'gcr.io/$PROJECT_ID/server_gitrdone:coverage',
+    '.'
+  ]
+- name: 'gcr.io/cloud-builders/docker'
+  args: ['push', 'gcr.io/$PROJECT_ID/server_gitrdone:coverage']
+images: ['gcr.io/$PROJECT_ID/server_gitrdone:base', 'gcr.io/$PROJECT_ID/server_gitrdone:latest', 'gcr.io/$PROJECT_ID/server_gitrdone:coverage']

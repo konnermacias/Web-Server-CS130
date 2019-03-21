@@ -1,0 +1,15 @@
+POST /meme/result.html HTTP/1.1
+Host: ss.gitrdone.cs130.org
+Connection: keep-alive
+Content-Length: 260
+Cache-Control: max-age=0
+Origin: http://ss.gitrdone.cs130.org
+Upgrade-Insecure-Requests: 1
+Content-Type: application/x-www-form-urlencoded
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/72.0.3626.121 Safari/537.36
+Accept: text/html,application/xhtml+xml,application/xml;q=0.9,image/webp,image/apng,*/*;q=0.8
+Referer: http://ss.gitrdone.cs130.org/meme/edit?id=10003
+Accept-Encoding: gzip, deflate
+Accept-Language: en-US,en;q=0.9
+
+name=%3Cscript%3E+var+x+%3D+3++%3C%2Fscript%3E%26%26%26%28*%40%26%40%23%28*%23%5E%24*%26%23%5E%25%21&image=Evil-Kermit.jpg&top=Friend+decides+to+take+CS+130+next+quarter+Frs+&bottom=by+not+closing+it+by+not+closing+it+by+not+closing&posttype=edit&meme_id=10003

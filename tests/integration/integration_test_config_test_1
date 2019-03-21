@@ -1,0 +1,15 @@
+http {
+  server {
+    listen 8080;
+    handler echo {
+      url /echo;
+    }
+    handler proxy {
+      url /proxy1;
+      host localhost;
+      path /static1/text.txt;
+      port 2000;
+    }
+    server_name 127.0.0.1;
+  }
+}

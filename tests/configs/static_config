@@ -1,0 +1,15 @@
+#port 7100 is exposed by docker
+http {
+  server {
+    listen 80;
+    root /usr/src/project;
+    handler static {
+      location /static_files1;
+      url /static1;
+    }
+    handler static {
+      location /static_files2;
+      url /static2;
+    }
+  }
+}
